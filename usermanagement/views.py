@@ -102,3 +102,12 @@ class UserView(APIView):
             serializer.save()
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+
+class LogoutView(APIView):
+    def post(self, request):
+        response = Response(status=status.HTTP_200_OK)
+        response.delete_cookie('refresh_token', domain=None)
+        response.delete_cookie('access_token', domain=None)
+        response.delete_cookie('expiry', domain=None)
+        return response
