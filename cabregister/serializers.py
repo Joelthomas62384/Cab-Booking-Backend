@@ -29,4 +29,3 @@ class CabSerializer(serializers.ModelSerializer):
             'driver_image' : {'required': True}
         }
 
-        

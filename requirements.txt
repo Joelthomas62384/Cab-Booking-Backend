@@ -16,11 +16,13 @@ djangorestframework_simplejwt==5.5.0
 hyperlink==21.0.0
 idna==3.10
 incremental==24.7.2
+pillow==11.1.0
 pyasn1==0.6.1
 pyasn1_modules==0.4.1
 pycparser==2.22
 PyJWT==2.9.0
 pyOpenSSL==25.0.0
+python-dotenv==1.0.1
 PyYAML==6.0.2
 requests==2.32.3
 service-identity==24.2.0
@@ -32,4 +34,3 @@ typing_extensions==4.12.2
 uber-rides==0.6.0
 urllib3==2.3.0
 zope.interface==7.2
-requests
