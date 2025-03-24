@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  backend:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      redis:
+        condition: service_started
+    environment:
+      - DEBUG=True
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+    restart: unless-stopped  
+
+  redis:
+    image: redis:alpine
+    restart: always
+    ports:
+      - "6379:6379"
