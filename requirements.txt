@@ -32,3 +32,4 @@ typing_extensions==4.12.2
 uber-rides==0.6.0
 urllib3==2.3.0
 zope.interface==7.2
+requests

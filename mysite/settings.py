@@ -101,7 +101,7 @@ REST_FRAMEWORK = {
 }
 
 
-
+GOOGLE_MAPS_API_KEY = "AIzaSyA1QvZsa_H2pOTQmBU52qEqVugn6b3KmBI"
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
