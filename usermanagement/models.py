@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser, PermissionsMixin):
-    username = models.CharField(max_length=255, unique=True)
+    username = models.CharField(max_length=255, unique=True , null=True)
     mobile = models.CharField(max_length=20, unique=True)
     full_name = models.CharField(max_length=150)
     created_at = models.DateTimeField(auto_now_add=True)

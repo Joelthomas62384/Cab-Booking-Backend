@@ -1,31 +1,21 @@
 from rest_framework import serializers
-from . models import CabImages,Cab
+from . models import Cab
 
-class CabImagesSerializer(serializers.ModelSerializer):
-    image = serializers.SerializerMethodField()
-
-    class Meta:
-        model = CabImages
-        fields = ('image','cab')
-
-    def get_image(self, obj):
-        request = self.context.get('request')
-        if request:
-            return request.build_absolute_uri(obj.image.url)
-        return None
 
     
 
 
 class CabSerializer(serializers.ModelSerializer):
-    cab_images = CabImagesSerializer(many=True, read_only=True)
     class Meta:
         model = Cab
-        fields = ('id',  'car_number', 'adhar', 'driving_license', 'vehicle_rc', 'vehicle_type', 'price_per_km', 'approved',  'busy', 'cab_images' ,'driver_image')
-        read_only = (
-            'id','user' , 'approved'
+        fields = (
+            'id', 'car_number', 'driver_age', 'driving_license', 'languages',
+            'car_details', 'mobile_number', 'vehicle_rc', 'vehicle_type',
+            'price_per_km', 'approved', 'driver_image', 'on_dutty', 'busy'
         )
+        read_only_fields = ('id', 'user', 'approved','busy')
         extra_kwargs = {
-            'driver_image' : {'required': True}
+            'driver_image': {'required': True},
+            'vehicle_type': {'required': True},
+            'price_per_km': {'required': True, 'min_value': 1}
         }
-

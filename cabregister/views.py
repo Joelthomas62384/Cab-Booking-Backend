@@ -7,20 +7,6 @@ from rest_framework.generics import CreateAPIView,ListCreateAPIView
 from django.shortcuts import get_object_or_404
 
 
-class CabImagesView(CreateAPIView):
-    serializer_class = CabImagesSerializer
-
-    def create(self, request, id, *args, **kwargs):
-        cab = get_object_or_404(Cab , id=id)
-        request.data['cab'] = cab.id
-
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-    
 
 
 

@@ -30,6 +30,7 @@ class LoginView(APIView):
 
             password = data.get('password')
             user = authenticate(username=username, password=password)
+            userserializer = UserSerializer(user)
             print(username , password)
             if user is None:
                 print("error here")
@@ -38,7 +39,7 @@ class LoginView(APIView):
             access = str(refresh.access_token)
             access_token = AccessToken(access)
             expiration_timestamp = access_token['exp']
-            response = Response( status=status.HTTP_200_OK)
+            response = Response(userserializer.data , status=status.HTTP_200_OK)
             response.set_cookie('refresh_token', str(refresh) , httponly=True , samesite="None" , secure=True)
             response.set_cookie(key='access_token',  value = access, secure=True , httponly=True , samesite= "None")
             response.set_cookie(key='expiry', value=expiration_timestamp, secure=True, httponly=False, samesite="None")

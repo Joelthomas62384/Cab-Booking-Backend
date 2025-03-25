@@ -1,6 +1,7 @@
 from rest_framework import serializers
 import re
 from . models import User
+from cabregister.models import Cab
 
 class LoginSerializer(serializers.Serializer):
     mobile = serializers.CharField(min_length=10, max_length = 15)
@@ -18,11 +19,12 @@ class LoginSerializer(serializers.Serializer):
 
 class UserSerializer(serializers.ModelSerializer):
     password = serializers.CharField(max_length=150, write_only=True)
+    is_driver = serializers.SerializerMethodField(read_only=True)
 
 
     class Meta:
         model = User
-        fields = ( 'mobile', 'username', 'full_name', 'password')
+        fields = ( 'mobile', 'full_name', 'password','is_driver')
         # extra_kwargs = {
         #     'password': {'write_only': True, 'required': True},
         # }
@@ -41,3 +43,7 @@ class UserSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Mobile number must be between 10 to 15 digits long.")
 
         return value
+    
+    def get_is_driver(self, obj):
+        return Cab.objects.filter(user=obj , approved=True).exists()
+
