@@ -46,8 +46,8 @@ redis_client = redis.StrictRedis(host="redis", port=6379, db=0, decode_responses
 
 class GetFreeCabs(APIView):
     
-    BASE_FARE = 50  # Base fare in currency units
-    RATE_PER_KM = 10  # Rate per km in currency units
+    BASE_FARE = 50  
+    RATE_PER_KM = 10  
 
     def post(self, request):
         from_location = request.data.get("from")
@@ -71,13 +71,11 @@ class GetFreeCabs(APIView):
         start_coords = (start_lat, start_lng)
         end_coords = (end_lat, end_lng)
 
-        # Calculate trip distance
         trip_distance = geodesic(start_coords, end_coords).km  
 
-        # Estimate price
         estimated_price = self.BASE_FARE + (trip_distance * self.RATE_PER_KM)
 
-        available_cabs = Cab.objects.filter(busy=False,approved=True)
+        available_cabs = Cab.objects.filter(busy=False,approved=True,on_dutty=True)
 
         nearby_cabs = []
         for cab in available_cabs:
@@ -121,5 +119,28 @@ class UpdatePath(APIView):
             rider.save()
 
             return Response({"message": "Location updated successfully"}, status=status.HTTP_200_OK)
+        except Cab.DoesNotExist:
+            return Response({"error": "Rider not found"}, status=status.HTTP_404_NOT_FOUND)
+
+
+class DriverProfile(APIView):
+    def get(self, request):
+        user = request.user  
+        try:
+            rider = Cab.objects.get(user=user)
+            serializer = CabSerializer(rider)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except Cab.DoesNotExist:
+            return Response({"error": "Rider not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+class CheckChange(APIView):
+    def post(self, request):
+        user = request.user  
+        try:
+            rider = Cab.objects.get(user=user)
+            rider.on_dutty = not rider.on_dutty
+            rider.save()
+            
+            return Response( status=status.HTTP_200_OK)
         except Cab.DoesNotExist:
             return Response({"error": "Rider not found"}, status=status.HTTP_404_NOT_FOUND)

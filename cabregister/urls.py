@@ -9,4 +9,6 @@ urlpatterns = [
     path('approve/<pk>' ,ApproveView.as_view() ),
     path('get-riders' ,GetFreeCabs.as_view()),
     path('update-path', UpdatePath.as_view()),
+    path('get-driver-profile' , DriverProfile.as_view()),
+    path('check-change' , CheckChange.as_view()),
 ]
