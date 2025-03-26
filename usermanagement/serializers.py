@@ -24,10 +24,11 @@ class UserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ( 'mobile', 'full_name', 'password','is_driver')
+        fields = ( 'mobile', 'full_name', 'password','is_driver','is_superuser','id')
         # extra_kwargs = {
         #     'password': {'write_only': True, 'required': True},
         # }
+        read_only_fields = ('is_driver','id')
 
     def create(self, validated_data):
         user = super().create(validated_data)
@@ -45,5 +46,5 @@ class UserSerializer(serializers.ModelSerializer):
         return value
     
     def get_is_driver(self, obj):
-        return Cab.objects.filter(user=obj , approved=True).exists()
+        return Cab.objects.filter(user=obj ).exists()
 

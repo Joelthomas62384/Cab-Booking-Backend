@@ -1,17 +1,19 @@
 from rest_framework import serializers
 from . models import Cab
+from usermanagement.serializers import UserSerializer
 
 
     
 
 
 class CabSerializer(serializers.ModelSerializer):
+    user = UserSerializer(read_only=True)
     class Meta:
         model = Cab
         fields = (
             'id', 'car_number', 'driver_age', 'driving_license', 'languages',
             'car_details', 'mobile_number', 'vehicle_rc', 'vehicle_type',
-            'price_per_km', 'approved', 'driver_image', 'on_dutty', 'busy'
+            'price_per_km', 'approved', 'driver_image', 'on_dutty', 'busy','user'
         )
         read_only_fields = ('id', 'user', 'approved','busy')
         extra_kwargs = {
