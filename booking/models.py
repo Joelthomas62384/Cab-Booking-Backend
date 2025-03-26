@@ -10,14 +10,17 @@ class Place(models.Model):
     def __str__(self):
         return self.name
 
+
+
+
 class Booking(models.Model):
     start_location = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="start_bookings")
     end_location = models.ForeignKey(Place, on_delete=models.CASCADE, related_name="end_bookings")
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="user_bookings")
     driver = models.ForeignKey(User, on_delete=models.CASCADE, related_name="driver_bookings")
     cab = models.ForeignKey(Cab, on_delete=models.CASCADE)
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
+    start_time = models.DateTimeField(auto_now_add=True)
+    end_time = models.DateTimeField(auto_now=True)
     completed = models.BooleanField(default=False)
 
     def __str__(self):

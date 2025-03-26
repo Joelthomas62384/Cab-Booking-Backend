@@ -75,7 +75,7 @@ class GetFreeCabs(APIView):
 
         estimated_price = self.BASE_FARE + (trip_distance * self.RATE_PER_KM)
 
-        available_cabs = Cab.objects.filter(busy=False,approved=True,on_dutty=True)
+        available_cabs = Cab.objects.filter(busy=False,approved=True,on_dutty=True).exclude(user = request.user)
 
         nearby_cabs = []
         for cab in available_cabs:
@@ -86,7 +86,7 @@ class GetFreeCabs(APIView):
                 nearby_cabs.append(cab)
 
         if not nearby_cabs:
-            return Response({"message": "No cabs available nearby"}, status=status.HTTP_200_OK)
+            return Response({"message": "No cabs available nearby"}, status=status.HTTP_400_BAD_REQUEST)
 
         # Sort by nearest cabs and limit to 50
         nearby_cabs = sorted(nearby_cabs, key=lambda x: x.distance)[:50]
@@ -140,6 +140,7 @@ class CheckChange(APIView):
             rider = Cab.objects.get(user=user)
             rider.on_dutty = not rider.on_dutty
             rider.save()
+            print(rider.on_dutty)
             
             return Response( status=status.HTTP_200_OK)
         except Cab.DoesNotExist:

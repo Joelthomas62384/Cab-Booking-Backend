@@ -2,27 +2,24 @@ from django.db import models
 from django.contrib.auth.models import AbstractBaseUser , PermissionsMixin , BaseUserManager
 
 class UserManager(BaseUserManager):
-    def create_user(self, mobile, username, full_name, password=None, **kwargs):
+    def create_user(self, mobile,  full_name, password=None, **kwargs):
         if not mobile:
             raise ValueError('Users must have a mobile number.')
-        if not username:
-            raise ValueError('Users must have a username.')
+       
         if not full_name:
             raise ValueError('Users must have a full name.')
 
         user = self.model(
             mobile=mobile,
-            username=username,
             full_name=full_name,
         )
         user.set_password(password)
         user.save(using=self._db)
         return user
     
-    def create_superuser(self, mobile, username, full_name, password, **kwargs):
+    def create_superuser(self, mobile,  full_name, password, **kwargs):
         user = self.create_user(
             mobile=mobile,
-            username=username,
             full_name=full_name,
             password=password,
         )
@@ -43,7 +40,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     objects = UserManager()
     USERNAME_FIELD = 'mobile'
-    REQUIRED_FIELDS = ['username', 'full_name']
+    REQUIRED_FIELDS = [ 'full_name']
     def __str__(self):
-        return self.username
+        return self.full_name
     
