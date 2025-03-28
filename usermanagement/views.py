@@ -31,7 +31,7 @@ class LoginView(APIView):
             password = data.get('password')
             user = authenticate(username=username, password=password)
             userserializer = UserSerializer(user)
-            print(username , password)
+            # print(username , password)
             if user is None:
                 print("error here")
                 return Response({'error': 'Invalid credentials'}, status=status.HTTP_400_BAD_REQUEST)

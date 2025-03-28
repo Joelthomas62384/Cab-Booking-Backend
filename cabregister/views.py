@@ -43,7 +43,6 @@ class ApproveView(APIView):
         return Response({'message' : "Cab approved successfully"}  , status=status.HTTP_200_OK)
     
 redis_client = redis.StrictRedis(host="redis", port=6379, db=0, decode_responses=True)
-
 class GetFreeCabs(APIView):
     
     BASE_FARE = 50  
@@ -75,7 +74,7 @@ class GetFreeCabs(APIView):
 
         estimated_price = self.BASE_FARE + (trip_distance * self.RATE_PER_KM)
 
-        available_cabs = Cab.objects.filter(busy=False,approved=True,on_dutty=True).exclude(user = request.user)
+        available_cabs = Cab.objects.filter(busy=False, approved=True, on_dutty=True).exclude(user=request.user)
 
         nearby_cabs = []
         for cab in available_cabs:
@@ -88,10 +87,12 @@ class GetFreeCabs(APIView):
         if not nearby_cabs:
             return Response({"message": "No cabs available nearby"}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Sort by nearest cabs and limit to 50
         nearby_cabs = sorted(nearby_cabs, key=lambda x: x.distance)[:50]
+        print(trip_distance)
 
-        serializer = CabSerializer(nearby_cabs, many=True, context={"request": request})
+        serializer = CabSerializer(
+            nearby_cabs, many=True, context={"request": request, "estimated_distance": trip_distance}
+        )
 
         return Response(
             {
@@ -101,6 +102,7 @@ class GetFreeCabs(APIView):
             },
             status=status.HTTP_200_OK
         )
+
 
 class UpdatePath(APIView):
   
